@@ -15,9 +15,9 @@
 ## 功能预览
 
 - 私聊或有管理员权限的群聊中直接翻译
-  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/chat.jpg?raw=true)
+  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/chat.jpg?raw=true | width=300)
 - 在任意聊天窗口 @fanyi_bot 通过 inline query 直接查询
-  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/inline.jpg?raw=true)
+  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/inline.jpg?raw=true | width=300)
 
 ## 最近更新
 
