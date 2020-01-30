@@ -12,6 +12,13 @@
 - [BETA] 任意聊天中 @fanyi_bot 调用翻译
 - [BETA] 自动中译英。
 
+## 功能预览
+
+- 私聊或有管理员权限的群聊中直接翻译
+  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/chat.jpg?raw=true)
+- 在任意聊天窗口 @fanyi_bot 通过 inline query 直接查询
+  ![chat](https://github.com/reycn/fanyi_bot/blob/master/src/inline.jpg?raw=true)
+
 ## 最近更新
 
 - 更换了更稳定的谷歌翻译 API
