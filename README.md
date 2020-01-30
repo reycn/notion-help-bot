@@ -1,7 +1,7 @@
 # 谷歌翻译机器人(fanyi_bot)
 
 ![GitHub top language](https://img.shields.io/github/languages/top/reycn/fanyi_bot)
-![version](https://img.shields.io/badge/version-2.1-green)  
+[![codebeat badge](https://codebeat.co/badges/660fd5c4-7218-4408-b57a-94877e55ffdb)](https://codebeat.co/projects/github-com-reycn-fanyi_bot-master) ![version](https://img.shields.io/badge/version-2.1-red) ![License](https://img.shields.io/badge/license-MIT-000000.svg)  
 为全世界语言提供中文翻译。  
 [在 Telegram 上使用](https://t.me/fanyi_bot)
 
@@ -16,7 +16,7 @@
 
 - 更换了更稳定的谷歌翻译 API
 - 提供了中译英的新功能。
-- 新增了任意调用功能
+- 新增了任意调用功能(inline mode)
 
 ## 如何部署？
 
