@@ -52,7 +52,9 @@ def handle(msg):
         # else:
         # print(get_text(msg_to_trans), type(get_text(msg_to_trans)), message_id)
         if chat_type == 'group' or chat_type == 'supergroup':
-            if command.startswith('/fy') or command.startswith(
+            if command == '/fy@fanyi_bot' or command == '/fy':
+                pass
+            elif command.startswith('/fy') or command.startswith(
                     '/fy@fanyi_bot'):
                 result = trans(get_text(msg_to_trans).replace('/fy', ''))
                 bot.sendMessage(
@@ -92,6 +94,7 @@ def output_clean(text):
     text = text.replace('HTTPS：/ /', 'https://')
     #text = text.replace('//////////', '\n\n')
     text = text.replace('/////', '\n')
+    text = text.replace('@fanyi_bot ', '')
     return text
 
 
