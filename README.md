@@ -24,14 +24,16 @@
 
 ## 最近更新
 
+- 修复了 Emoji 导致的翻译问题
+- 使用配置文件的方式存储 TOKEN
 - 更换了更稳定的谷歌翻译 API
 - 提供了中译英的新功能。
 - 新增了任意调用功能(inline mode)
 
 ## 如何部署？
 
-- 将你的 [Telegram Bot Token](https://core.telegram.org/bots#6-botfather) 放入 main.py 中的 16 行 TOKEN 处
-- 安装依赖 `telepot`, `googletrans`, and `googletrans`
+- 按照 `confi.template` 文件的格式新建 `config.ini` 配置文件，将你的 [Telegram Bot Token](https://core.telegram.org/bots#6-botfather) 放入该文件中
+- 安装依赖 `telepot`, `termcolor`, and `googletrans`
 - 执行 `python3 main.py` / 或后台执行 `setsid python3 main.py`
 
 ## 代码依赖
