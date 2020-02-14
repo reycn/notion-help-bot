@@ -42,17 +42,21 @@ def handle(msg):
         if 'reply_to_message' in msg:
             msg_to_trans = msg['reply_to_message']
             command = get_text(msg)
+            reply = True
             print(get_text(msg_to_trans), type(get_text(msg_to_trans)),
                   message_id)
         else:
             msg_to_trans = msg
+            reply = False
             command = get_text(msg_to_trans)
         # if len(command) <= len('/fy@fanyi_bot'):
         #     pass
         # else:
         # print(get_text(msg_to_trans), type(get_text(msg_to_trans)), message_id)
         if chat_type == 'group' or chat_type == 'supergroup':
-            if command == '/fy@fanyi_bot' or command == '/fy':
+            if command == '/fy@fanyi_bot' and reply == False:
+                pass
+            elif command == '/fy' and reply == False:
                 pass
             elif command.startswith('/fy') or command.startswith(
                     '/fy@fanyi_bot'):
