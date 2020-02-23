@@ -43,12 +43,12 @@
 ## 如何部署到自己的服务器？
 
 - 按照 `confi.template` 文件的格式新建 `config.ini` 配置文件，将你的 [Telegram Bot Token](https://core.telegram.org/bots#6-botfather) 放入该文件中
-- 安装依赖 `telepot`, `termcolor`, and `googletrans`
+- `pip install -r requirements.txt` 安装依赖 `aiogram`, `termcolor`, and `googletrans`
 - 执行 `python3 main.py` / 或后台执行 `setsid python3 main.py`
 
 ## 代码依赖
 
-- Python 3
-- [telepot](https://github.com/nickoala/telepot) Python framework for Telegram Bot API
+- Python >= 3.7
+- [aiogram](https://github.com/aiogram/aiogram) Is a pretty simple and fully asynchronous framework for Telegram Bot API written in Python 3.7 with asyncio and aiohttp.
 - [googletrans](https://github.com/ssut/py-googletrans) (unofficial) Googletrans: Free and Unlimited Google translate API for Python.
 - [termcolor](https://github.com/hfeeki/termcolor) (fork version) fork of termcolor Python library
