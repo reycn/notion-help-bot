@@ -34,7 +34,7 @@ def trans_c(text, lang='zh-CN', detect=1):
     if STAT:
         try:
             stathat = StatHat()
-            stathat.ez_post_count(STAT_ACCOUNT, STAT_ACCOUNT, 1)
+            stathat.ez_post_count(STAT_ACCOUNT, STAT_INSTANCE, 1)
         except Exception as e:
             cprint('Request susceed but stat failed!' + e, 'white', 'on_red')
     return translated_cleaned
