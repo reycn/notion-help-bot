@@ -1,0 +1,3 @@
+aiogram==2.6.1
+termcolor==1.1.0
+googletrans==2.4.0

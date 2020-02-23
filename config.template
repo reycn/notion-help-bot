@@ -1,5 +1,11 @@
 [bot]
 token=111111111:Asdfasdfasdfasdfasdfadsfsadfasda
 
-[language]
-lang=zh-CN
+[stat]
+# http://stathat.com/
+enabled=True
+account=aaaaaaaa@gmail.com
+instance=Translation
+
+[lang]
+destination=zh-CN

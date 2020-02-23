@@ -7,22 +7,20 @@
 
 import re
 from googletrans import Translator
+from termcolor import cprint
 
 
 def text_clean(text):
     # TODO: 文本清洗
     text = re.sub('(\[转发自.*\])\n', '', text)
-    #text = re.sub("(#.*)", '', text)
     text = text.replace('\n', '/////')
     text = text.replace('#', ' ')
-    # text = urllib.quote(text)
     text = filter_emoji(text)
-    print(text)
     return (text)
 
 
 def filter_emoji(desstr, restr=''):
-    #过滤表情
+    # 过滤表情
     try:
         res = re.compile(u'[\U00010000-\U0010ffff]')
     except re.error:
@@ -33,10 +31,10 @@ def filter_emoji(desstr, restr=''):
 def big5(text):
     try:
         text.encode('big5hkscs')
-        print('繁体')
+        cprint('繁体', 'white', 'on_grey')
         result = True
     except Exception as e:
-        print('简体', e)
+        cprint('简体' + e, 'white', 'on_grey')
         result = False
     return result
 
@@ -44,21 +42,20 @@ def big5(text):
 def trans(text, lang='zh-CN', detect=1):
     text = text_clean(text)
     tr = Translator()
-    if tr.detect(text).lang == 'zh-CN':
-        result = tr.translate(text, dest='zh-CN').text + '\n─────\n' \
-               + tr.translate(text, dest='en').text
-        print(result)
+    if lang == 'en':
+        result = '🇺🇸 ' + tr.translate(text, dest='en').text
+    elif lang == 'zh':
+        result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text
     else:
-        result = tr.translate(text, dest='zh-CN').text + '\n─────\n' \
-               + text
+        if tr.detect(text).lang == 'zh-CN':
+            result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text + '\n\n🇺🇸 ' \
+                + tr.translate(text, dest='en').text
+            # print(result)
+        else:
+            result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text + '\n\n🇺🇸 ' \
+                + text
     return result
 
 
 if __name__ == "__main__":
-    # result = trans(
-    #     "[转发自用户 Reynard]\n[转发自用户 IFTTT]\nYou have successfully connected the channel @apex_info. You can now use it with Telegram Applets on IFTTT (https://ifttt.com/telegram) (https://ifttt.com/telegram)."
-    # )
-    # print(result[0].replace('.', '。') + '\n\n(源语言被自动识别为: ' +
-    #       result[1].upper() +
-    #       ', 由 Google Translate(https://translate.google.com) 提供。)')
     pass
