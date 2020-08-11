@@ -12,16 +12,6 @@
 - 群聊添加"翻译"接文字或回复需翻译的文本；
 - 任意聊天中 @fanyi_bot 实时翻译。
 
-## 功能预览
-
-- 私聊或有管理员权限的群聊中直接翻译
-
-  <img src="https://github.com/reycn/fanyi_bot/blob/master/res/chat.jpg?raw=true" width="300"></img>
-
-- 在任意聊天窗口 @fanyi_bot 通过 inline query 直接查询
-
-  <img src="https://github.com/reycn/fanyi_bot/blob/master/res/inline.jpg?raw=true" width="300"></img>
-
 ## 最近更新 / 2020.8.11
 - [2020.08.11] 修复交互细节
 - [2020.08.05] 机器人现已无需管理员权限
@@ -48,6 +38,16 @@
 - 按照 `confi.template` 文件的格式新建 `config.ini` 配置文件，将你的 [Telegram Bot Token](https://core.telegram.org/bots#6-botfather) 放入该文件中
 - `pip install -r requirements.txt` 安装依赖 `aiogram`, `termcolor`, and `googletrans`
 - 执行 `python3 main.py` / 或后台执行 `setsid python3 main.py`
+
+## 功能预览
+
+- 私聊或有管理员权限的群聊中直接翻译
+
+  <img src="https://github.com/reycn/fanyi_bot/blob/master/res/chat.jpg?raw=true" width="300"></img>
+
+- 在任意聊天窗口 @fanyi_bot 通过 inline query 直接查询
+
+  <img src="https://github.com/reycn/fanyi_bot/blob/master/res/inline.jpg?raw=true" width="300"></img>
 
 ## 代码依赖
 
