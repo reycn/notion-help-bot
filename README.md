@@ -1,7 +1,7 @@
 # 谷歌翻译机器人(fanyi_bot)
 
 ![GitHub top language](https://img.shields.io/github/languages/top/reycn/fanyi_bot)
-[![codebeat badge](https://codebeat.co/badges/660fd5c4-7218-4408-b57a-94877e55ffdb)](https://codebeat.co/projects/github-com-reycn-fanyi_bot-master) ![version](https://img.shields.io/badge/version-2.3-red) ![License](https://img.shields.io/badge/license-MIT-000000.svg) ![Served](https://img.shields.io/badge/dynamic/json?color=27ae60&label=served&query=%24%5B0%5D.points%5B0%5D.value&suffix=%20times&url=https%3A%2F%2Fwww.stathat.com%2Fx%2FTBKGENBCfgrMmHY4GCpo%2Fdata%2FYTlb%3Fsummary%3D10y10y)  
+[![codebeat badge](https://codebeat.co/badges/660fd5c4-7218-4408-b57a-94877e55ffdb)](https://codebeat.co/projects/github-com-reycn-fanyi_bot-master) ![version](https://img.shields.io/badge/version-2.4-red) ![License](https://img.shields.io/badge/license-MIT-000000.svg) [![Served](https://img.shields.io/badge/dynamic/json?color=27ae60&label=served&query=%24%5B0%5D.points%5B0%5D.value&suffix=%20times&url=https%3A%2F%2Fwww.stathat.com%2Fx%2FTBKGENBCfgrMmHY4GCpo%2Fdata%2FYTlb%3Fsummary%3D10y10y)](https://www.stathat.com/s/9xOlCBfnl1kj)  
 为全世界语言提供中文翻译。  
 [在 Telegram 上使用](https://t.me/fanyi_bot)
 
