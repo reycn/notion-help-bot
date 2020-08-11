@@ -43,16 +43,18 @@ def trans(text, lang='zh-CN', detect=1):
     text = text_clean(text)
     tr = Translator()
     if lang == 'en':
-        result = '🇺🇸 ' + tr.translate(text, dest='en').text
+        # result = '🇺🇸 ' + tr.translate(text, dest='en').text
+        result =tr.translate(text, dest='en').text
     elif lang == 'zh':
-        result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text
+        # result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text
+        result = tr.translate(text, dest='zh-CN').text
     else:
         if tr.detect(text).lang == 'zh-CN':
-            result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text + '\n\n🇺🇸 ' \
+            result = tr.translate(text, dest='zh-CN').text + '\n' \
                 + tr.translate(text, dest='en').text
             # print(result)
         else:
-            result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text + '\n\n🇺🇸 ' \
+            result = tr.translate(text, dest='zh-CN').text + '\n' \
                 + text
     return result
 
