@@ -10,7 +10,6 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import InlineQuery, \
     InputTextMessageContent, InlineQueryResultArticle
 
-
 # 初始化 bot
 try:
     cfg = ConfigParser()
@@ -24,7 +23,6 @@ except Exception as e:
     cprint('Config file error, exit...', 'white', 'on_red')
     print(e)
     exit()
-
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
@@ -43,11 +41,14 @@ def trans_c(text, lang='zh-CN', detect=1):
     return translated_cleaned
 
 
-def msg_trans(message: types.Message, offset: int=0, lang: str=None, reg: str=None):
+def msg_trans(message: types.Message,
+              offset: int = 0,
+              lang: str = None,
+              reg: str = None):
     if message.reply_to_message:  # 如果是回复则取所回复消息文本
         text = message.reply_to_message.text
     else:  # 如果不是回复则取命令后文本
-        text = message.text[offset:] # 去除命令文本
+        text = message.text[offset:]  # 去除命令文本
     text = text.replace('@fanyi_bot', '').strip()
     if reg:
         text = re.sub(reg, '', text)
@@ -56,7 +57,7 @@ def msg_trans(message: types.Message, offset: int=0, lang: str=None, reg: str=No
     else:
         clog(message)
         result = trans_c(text, lang)
-    return(result)
+    return (result)
 
 
 def clog(message):
@@ -104,19 +105,24 @@ Chinese A sentence to translate
 服务掉线联系 @reycn，反馈到 @fanyi_group。'''
     await message.answer(intro)
 
+
 ####################################################################################################
 # 翻译命令
 ####################################################################################################
 # 中英文
-@dp.message_handler(commands=['fy', 'tr', '翻译' ])
+@dp.message_handler(commands=['fy', 'tr', '翻译'])
 async def fy_command(message: types.Message):
-    result = msg_trans(message, 3) # None -> Chinese + English
+    result = msg_trans(message, 3)  # None -> Chinese + English
     await message.reply(result)
+
+
 # 中文
 @dp.message_handler(commands=['zh'])
 async def zh(message: types.Message):
     result = msg_trans(message, 3, 'zh')
     await message.reply(result)
+
+
 # 英文
 @dp.message_handler(commands=['en'])
 async def en(message: types.Message):
@@ -132,15 +138,18 @@ async def fy_keyword_zh(message: types.Message):
     result = msg_trans(message, reg='^(translate|trans|tran|翻译) .')
     await message.reply(result)
 
+
 @dp.message_handler(regexp='^(英文|English|en) ')
 async def en_keyword_zh(message: types.Message):
     result = msg_trans(message, lang='en', reg='^(英文|English|en) ')
     await message.reply(result)
 
+
 @dp.message_handler(regexp='^(中文|Chinese|zh) ')
 async def zh_keyword(message: types.Message):
     result = msg_trans(message, lang='zh', reg='^(中文|Chinese|zh) ')
     await message.reply(result)
+
 
 ####################################################################################################
 # 私聊自动检测语言并翻译
@@ -205,7 +214,7 @@ async def inline(inline_query: InlineQuery):
             ),
             InlineQueryResultArticle(
                 id=2,
-                title='中文 / Simplefiled Chinese',
+                title='中文 / Simplified Chinese',
                 description=f'{zh_str}'.strip(),
                 thumb_width=0,
                 input_message_content=InputTextMessageContent(
