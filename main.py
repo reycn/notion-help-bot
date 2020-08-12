@@ -52,8 +52,13 @@ def msg_trans(message: types.Message,
     text = text.replace('@fanyi_bot', '').strip()
     if reg:
         text = re.sub(reg, '', text)
+
     if len(text) == 0:
-        pass
+        if message.reply_to_message:
+            clog(message)
+            result = trans_c(text, lang)
+        else:
+            pass
     else:
         clog(message)
         result = trans_c(text, lang)
@@ -133,9 +138,9 @@ async def en(message: types.Message):
 ####################################################################################################
 # 自然指令
 ####################################################################################################
-@dp.message_handler(regexp='^(translate|trans|tran|翻译) .')
+@dp.message_handler(regexp='^(translate|trans|tran|翻译) ')
 async def fy_keyword_zh(message: types.Message):
-    result = msg_trans(message, reg='^(translate|trans|tran|翻译) .')
+    result = msg_trans(message, reg='^(translate|trans|tran|翻译) ')
     await message.reply(result)
 
 
@@ -149,6 +154,27 @@ async def en_keyword_zh(message: types.Message):
 async def zh_keyword(message: types.Message):
     result = msg_trans(message, lang='zh', reg='^(中文|Chinese|zh) ')
     await message.reply(result)
+
+
+@dp.message_handler(regexp='^(translate|trans|tran|翻译)')
+async def fy_keyword_zh(message: types.Message):
+    if message.reply_to_message:
+        result = msg_trans(message, reg='^(translate|trans|tran|翻译)')
+        await message.reply(result)
+
+
+@dp.message_handler(regexp='^(英文|English|en)')
+async def en_keyword_zh(message: types.Message):
+    if message.reply_to_message:
+        result = msg_trans(message, lang='en', reg='^(英文|English|en)')
+        await message.reply(result)
+
+
+@dp.message_handler(regexp='^(中文|Chinese|zh)')
+async def zh_keyword(message: types.Message):
+    if message.reply_to_message:
+        result = msg_trans(message, lang='zh', reg='^(中文|Chinese|zh)')
+        await message.reply(result)
 
 
 ####################################################################################################
