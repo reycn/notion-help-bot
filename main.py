@@ -1,3 +1,4 @@
+#!/usr/bin/python3.7
 import logging
 import re
 from clean import output
@@ -9,6 +10,8 @@ from termcolor import cprint
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import InlineQuery, \
     InputTextMessageContent, InlineQueryResultArticle
+from sentry_sdk import init, capture_message
+
 
 # 初始化 bot
 try:
@@ -18,16 +21,20 @@ try:
     STAT = cfg.get('stat', 'enabled')  # 不启用则不使用统计
     STAT_ACCOUNT = cfg.get('stat', 'account')
     STAT_INSTANCE = cfg.get('stat', 'instance')
+    SENTRY_SDK = cfg.get('sentry', 'sdk')
     # LANG = cfg.get('lang', 'destination') # 暂时没有使用
+
+    
 except Exception as e:
     cprint('Config file error, exit...', 'white', 'on_red')
+    capture_message('Config file error, exit...')
     print(e)
     exit()
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-
+init( SENTRY_SDK, traces_sample_rate=1.0)
 
 # 定义函数
 def trans_c(text, lang='zh-CN', detect=1):
@@ -38,6 +45,7 @@ def trans_c(text, lang='zh-CN', detect=1):
             stathat.ez_post_count(STAT_ACCOUNT, STAT_INSTANCE, 1)
         except Exception as e:
             cprint('Request susceed but stat failed!' + e, 'white', 'on_red')
+            capture_message('Request susceed but stat failed!')
     return translated_cleaned
 
 
@@ -53,16 +61,19 @@ def msg_trans(message: types.Message,
     if reg:
         text = re.sub(reg, '', text)
 
-    if len(text) == 0:
+    if len(text) == 0 :
         if message.reply_to_message:
             clog(message)
+            # capture_message(message)
             result = trans_c(text, lang)
+            return (result)
         else:
             pass
     else:
         clog(message)
+        # capture_message(message)
         result = trans_c(text, lang)
-    return (result)
+        return (result)
 
 
 def clog(message):
@@ -75,39 +86,31 @@ def clog(message):
         cprint(
             f'[{chat_type}, %{group}, &{chat_name}, @{user}, #{user_id}] {message.text} ',
             'white', 'on_cyan')
+        # capture_message(f'[{chat_type}, %{group}, &{chat_name}, @{user}, #{user_id}] {message.text} ')
     else:
         cprint(f'[{chat_type}, @{chat_name}, #{user_id}] {message.text} ',
                'white', 'on_cyan')
+        # capture_message(f'[{chat_type}, @{chat_name}, #{user_id}] {message.text} ')
 
 
 ####################################################################################################
 # 欢迎词
 @dp.message_handler(commands=['start', 'welcome', 'about', 'help'])
 async def start(message: types.Message):
-    intro = '''使用说明？
-- 与我私聊，自动翻译文字消息；
-- 与我私聊或群聊中，使用翻译命令或起始关键字翻译文本或回复需要翻译的消息；
-- 群聊添加"翻译"接文字或回复需翻译的文本；
-- 任意聊天中 @fanyi_bot 实时翻译。
+    intro = '''使用说明：
+- 私聊机器人，自动翻译文字消息；
+- 群聊中添加机器人，使用命令翻译指定消息；
+- 任意聊天框，输入 @fanyi_bot 实时翻译。
 
 使用样例：
--
-/fy 要翻译的一句话
-/zh A sentence to translate
--
-翻译 要翻译的一句话
-中文 A sentence to translate
--
-English 要翻译的一句话
-Chinese A sentence to translate
+/fy 检测语言并翻译
+/zh Translate a sentence into Chinese.
+/en 翻译到英文
 
 最近更新
-- [2020.08.05] 机器人现已无需管理员权限
-- [2020.08.04] 使用最新模型，提升翻译质量
-- [2020.08.04] 添加自然语言命令
-- [2020.08.04] 更改其他交互细节
+- [2020.11.14] 修复了一个上游引起的 BUG
 
-服务掉线联系 @reycn，反馈到 @fanyi_group。'''
+加入群组 @fanyi_group 参与讨论。'''
     await message.answer(intro)
 
 
@@ -144,9 +147,9 @@ async def fy_keyword_zh(message: types.Message):
     await message.reply(result)
 
 
-@dp.message_handler(regexp='^(英文|English|en) ')
+@dp.message_handler(regexp='^(英文|英语|English|en) ')
 async def en_keyword_zh(message: types.Message):
-    result = msg_trans(message, lang='en', reg='^(英文|English|en) ')
+    result = msg_trans(message, lang='en', reg='^(英文|英语|English|en) ')
     await message.reply(result)
 
 
@@ -154,7 +157,6 @@ async def en_keyword_zh(message: types.Message):
 async def zh_keyword(message: types.Message):
     result = msg_trans(message, lang='zh', reg='^(中文|Chinese|zh) ')
     await message.reply(result)
-
 
 @dp.message_handler(regexp='^(translate|trans|tran|翻译)')
 async def fy_keyword_zh(message: types.Message):
@@ -175,8 +177,6 @@ async def zh_keyword(message: types.Message):
     if message.reply_to_message:
         result = msg_trans(message, lang='zh', reg='^(中文|Chinese|zh)')
         await message.reply(result)
-
-
 ####################################################################################################
 # 私聊自动检测语言并翻译
 ####################################################################################################
@@ -185,6 +185,7 @@ async def text_message(message: types.Message):
     chat_type = message.chat.type
     if chat_type == 'private':
         clog(message)
+        # capture_message(message)
         result = trans_c(message.text)
         await message.reply(result)
     else:  # 过滤所有群聊、频道
@@ -194,12 +195,15 @@ async def text_message(message: types.Message):
 @dp.message_handler()
 async def other_types(message: types.Message):
     print('Other types')
+    # capture_message('Other types')
     try:
         clog(message)
+        # capture_message(message)
         result = trans_c(message.text)
     except Exception as e:
         print('Exception', e)
-        result = '🌚 ? ? ?'
+        capture_message('Exception', e)
+        result = '? ? ?'
     await message.answer(result)
 
 
@@ -217,17 +221,17 @@ async def inline(inline_query: InlineQuery):
         pass
     else:
         cprint(f'[inline, @{user}, #{user_id}] {text} ', 'white', 'on_cyan')
+        # capture_message(f'[inline, @{user}, #{user_id}] {text} ')
         zh_str = trans_c(text, 'zh').replace(end_str, '')
         en_str = trans_c(text, 'en').replace(end_str, '')
         items = [
             InlineQueryResultArticle(
                 id=0,
                 title=f'自动检测 / Auto detection',
-                description=f'{zh_str[:40]}... {en_str[:40]}...'.replace(
-                    '🇨🇳', '').replace('🇺🇸', '').strip(),
+                description=f'{zh_str[:40]}... {en_str[:40]}...'.strip(),
                 thumb_width=0,
                 input_message_content=InputTextMessageContent(
-                    f'{zh_str}\n\n{en_str}{end_str}',
+                    f'{zh_str}\n{en_str}{end_str}',
                     disable_web_page_preview=True),
             ),
             InlineQueryResultArticle(
@@ -254,4 +258,5 @@ async def inline(inline_query: InlineQuery):
 
 if __name__ == '__main__':
     cprint('I\'m working now...', 'white', 'on_green')
+    capture_message('I\'m working now...')
     executor.start_polling(dp, skip_updates=True)

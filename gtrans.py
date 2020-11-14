@@ -8,7 +8,7 @@
 import re
 from googletrans import Translator
 from termcolor import cprint
-
+from time import sleep
 
 def text_clean(text):
     # TODO: 文本清洗
@@ -43,21 +43,46 @@ def trans(text, lang='zh-CN', detect=1):
     text = text_clean(text)
     tr = Translator()
     if lang == 'en':
-        # result = '🇺🇸 ' + tr.translate(text, dest='en').text
-        result =tr.translate(text, dest='en').text
+        result =get_trans(text, dest='en').text
     elif lang == 'zh':
-        # result = '🇨🇳 ' + tr.translate(text, dest='zh-CN').text
-        result = tr.translate(text, dest='zh-CN').text
+        result = get_trans(text, dest='zh-CN').text
     else:
-        if tr.detect(text).lang == 'zh-CN':
-            result = tr.translate(text, dest='zh-CN').text + '\n' \
-                + tr.translate(text, dest='en').text
-            # print(result)
+        if get_lang(text).lang == 'zh-CN':
+            result = get_trans(text, dest='zh-CN').text + '\n' \
+                + get_trans(text, dest='en').text
         else:
-            result = tr.translate(text, dest='zh-CN').text + '\n' \
+            result = get_trans(text, dest='zh-CN').text + '\n' \
                 + text
     return result
 
+def get_lang(text):
+    translator = Translator()
+    lang = None
+    while lang == None:
+        try:
+            lang = translator.detect(text)
+        except:
+            translator = Translator()
+            sleep(0.8)
+            pass
+    return lang
+
+result = get_lang('hello')
+
+def get_trans(text,**kwargs):
+    translator = Translator()
+    result = None
+    while result == None:
+        try:
+            result = translator.translate(text,**kwargs)
+        except Exception as e:
+            cprint('API Error' + str(e), 'white', 'on_yellow')
+            translator = Translator()
+            sleep(0.8)
+            pass
+    return result     
+    
+result = get_trans('hello',dest='ja') 
 
 if __name__ == "__main__":
     pass
