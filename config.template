@@ -9,3 +9,8 @@ instance=Translation
 
 [lang]
 destination=zh-CN
+
+
+[sentry]
+log=False
+sdk=https://sdfsafdasdf@asdfasdfasdf.ingest.sentry.io/52345234

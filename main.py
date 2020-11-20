@@ -10,7 +10,7 @@ from termcolor import cprint
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import InlineQuery, \
     InputTextMessageContent, InlineQueryResultArticle
-from sentry_sdk import init, capture_message
+# from sentry_sdk import init, capture_message
 
 
 # 初始化 bot
@@ -21,7 +21,7 @@ try:
     STAT = cfg.get('stat', 'enabled')  # 不启用则不使用统计
     STAT_ACCOUNT = cfg.get('stat', 'account')
     STAT_INSTANCE = cfg.get('stat', 'instance')
-    SENTRY_SDK = cfg.get('sentry', 'sdk')
+    # SENTRY_SDK = cfg.get('sentry', 'sdk')
     # LANG = cfg.get('lang', 'destination') # 暂时没有使用
 
     
@@ -34,7 +34,7 @@ except Exception as e:
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-init( SENTRY_SDK, traces_sample_rate=1.0)
+# init( SENTRY_SDK, traces_sample_rate=1.0)
 
 # 定义函数
 def trans_c(text, lang='zh-CN', detect=1):
