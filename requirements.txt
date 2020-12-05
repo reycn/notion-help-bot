@@ -1,4 +1,4 @@
-termcolor==1.1.0
 sentry_sdk==0.19.3
-googletrans==3.0.0
+google_trans_new==1.1.4
 aiogram==2.6.1
+termcolor==1.1.0

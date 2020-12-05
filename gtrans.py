@@ -6,7 +6,7 @@
 # @Version : 1.0.0
 
 import re
-from googletrans import Translator
+from google_trans_new import google_translator
 from termcolor import cprint
 from time import sleep
 
@@ -41,22 +41,22 @@ def big5(text):
 
 def trans(text, lang='zh-CN', detect=1):
     text = text_clean(text)
-    tr = Translator()
+    tr = google_translator()
     if lang == 'en':
-        result =get_trans(text, dest='en').text
+        result =get_trans(text, lang_tgt='en')
     elif lang == 'zh':
-        result = get_trans(text, dest='zh-CN').text
+        result = get_trans(text, lang_tgt='zh-CN')
     else:
-        if get_lang(text).lang == 'zh-CN':
-            result = get_trans(text, dest='zh-CN').text + '\n' \
-                + get_trans(text, dest='en').text
+        if get_lang(text)[0] == 'zh-CN':
+            result = get_trans(text, lang_tgt='zh-CN') + '\n' \
+                + get_trans(text, lang_tgt='en')
         else:
-            result = get_trans(text, dest='zh-CN').text + '\n' \
+            result = get_trans(text, lang_tgt='zh-CN') + '\n' \
                 + text
     return result
 
 def get_lang(text):
-    translator = Translator()
+    translator = google_translator()
     lang = None
     while lang == None:
         try:
@@ -70,19 +70,21 @@ def get_lang(text):
 result = get_lang('hello')
 
 def get_trans(text,**kwargs):
-    translator = Translator()
+    translator = google_translator()
     result = None
     while result == None:
         try:
             result = translator.translate(text,**kwargs)
         except Exception as e:
             cprint('API Error' + str(e), 'white', 'on_yellow')
-            translator = Translator()
+            translator = google_translator()
             sleep(0.8)
             pass
     return result     
     
-result = get_trans('hello',dest='ja') 
+result = get_trans('hello',lang_tgt='ja') 
 
 if __name__ == "__main__":
     pass
+
+
