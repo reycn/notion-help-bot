@@ -1,6 +1,6 @@
 {
 	"name": "bot",
-	"cwd": "~/bot/",
+	"cwd": "/root/bot/",
 	"script": "main.py",
 	"interpreter": "python3.7",
 	"instances": 1,

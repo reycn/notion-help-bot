@@ -1,4 +1,5 @@
 config.ini
+*.pid
 settings.json
 .idea/
 # Byte-compiled / optimized / DLL files
