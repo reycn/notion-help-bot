@@ -1,16 +1,2 @@
 [bot]
 token=111111111:Asdfasdfasdfasdfasdfadsfsadfasda
-
-[stat]
-# http://stathat.com/
-enabled=True
-account=aaaaaaaa@gmail.com
-instance=Translation
-
-[lang]
-destination=zh-CN
-
-
-[sentry]
-log=False
-sdk=https://sdfsafdasdf@asdfasdfasdf.ingest.sentry.io/52345234

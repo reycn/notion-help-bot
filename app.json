@@ -1,13 +1,13 @@
 {
-	"name": "bot",
+	"name": "NotionBot",
 	"cwd": "/root/bot/",
 	"script": "main.py",
-	"interpreter": "python3.7",
+	"interpreter": "python3.8",
 	"instances": 1,
 	"autorestart": true,
 	"watch": false,
 	"max_memory_restart": "256M",
-	"pid": "fanyi_bot.pid",
+	"pid": "notion_bot.pid",
 	"out_file": "logs/app-out.log",
 	"error_file": "logs/app-err.log"
 }
