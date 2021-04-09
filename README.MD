@@ -12,4 +12,4 @@ A Telegram bot designed for [Notion CN Community](https://t.me/Notionso).
 
 
 # Screenshot
-![img]("./res/chinese.png")
+![img](res/chinese.png)
