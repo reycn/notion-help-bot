@@ -15,9 +15,12 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram import types
 # 初始化 bot
 try:
+    CHINESE_COUNT = 0
     cfg = ConfigParser()
     cfg.read(syspath[0] + '/config.ini')
     API_TOKEN = cfg.get('bot', 'token')
+    with open(syspath[0] + '/logs/chinese.txt', 'r') as f:
+        CHINESE_COUNT = int(f.read())
 
 except Exception as e:
     cprint('Config file error, exit...', 'white', 'on_red')
@@ -105,15 +108,29 @@ async def start(message: types.Message):
     # '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文).*Notion)'
 async def reply(message: types.Message):
     global LAST_TIME
+    global CHINESE_COUNT
     clog(message)
     if (time.time() - LAST_TIME) < 10:
         print("Too frquent, ignored.")
         pass
-    else:
-        result = '''Notion 中文界面正在内部测试中，即将上线，敬请期待。[FAQ](https://t.me/Notionso/31739)'''
+    elif (time.time() - LAST_TIME) < 60:
+
+        result = f'''再调戏我，打你屁屁，哼！  w(ﾟДﾟ)w.'''
         await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(0.5)
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+    else:
+        result = f'''尚未发布，具体上线时间以官方消息为准。
+这是提及中文的第 {CHINESE_COUNT} 次。
+
+
+[FAQ](https://t.me/Notionso/31739)'''
+        await bot.send_chat_action(message.chat.id, action="typing")
+        CHINESE_COUNT += 1
         sleep(1.5)
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        with open(syspath[0] + '/logs/chinese.txt', 'w') as f:
+            f.write(str(CHINESE_COUNT))
         LAST_TIME = time.time()
 
 
@@ -210,6 +227,20 @@ async def reply(message: types.Message):
         sleep(1.5)
         result = '''Q: 表格功能支持吗？
 A：无，但目前你可以通过公式生成： [表格生成器](https://www.notion.so/reycn/Notion-Table-Generator-c659abf41dfc4af7a69e5ae435b30d0c)'''
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        LAST_TIME = time.time()
+
+@dp.message_handler(regexp='(置顶)')
+async def reply(message: types.Message):
+    global LAST_TIME
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    else:
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(1.5)
+        result = '''好嘞！ 这就是 [置顶](https://t.me/Notionso/123746)'''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
@@ -345,6 +376,27 @@ A: 官方头像都是设计师专门绘制的，但你也可以[用一个项目�
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
+@dp.message_handler(regexp='(notion.*博客|博客.*notion|Nobelium)')
+async def reply(message: types.Message):
+    global LAST_TIME
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    else:
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(1.5)
+        result = '''Q: 怎么用 Notion 搭建博客？ 
+A: 可以试试 [Nobelium](https://github.com/craigary/nobelium/blob/main/README-CN.md) 
+
+它是一个使用 NextJS + Notion API 实现的，部署在 Vercel 上的静态博客系统。
+
+> [效果预览](https://nobelium.vercel.app/)
+> [项目开源地址](https://github.com/craigary/nobelium)
+> [小白部署指南](https://blog.skylershu.com/post/nobelium-deployment-guide/)'''
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        LAST_TIME = time.time()
+
 
 @dp.message_handler(regexp='(机器人您好笨)')
 async def reply(message: types.Message):
@@ -471,7 +523,7 @@ async def _(call: types.CallbackQuery):
     global LAST_TIME
     await call.message.delete()
     LAST_TIME = LAST_TIME + 10
-    await call.answer(text="该消息已删除")
+    await call.answer(text="该消息已为所有人删除")
 
 
 @dp.message_handler(regexp='(模板)')
