@@ -185,7 +185,8 @@ async def reply(message: types.Message):
 A：Notion 本身暂不支持思维导图，如实在需要可嵌入网页使用：
 1、[Whimsical](https://whimsical.com/);
 2、[Miro](https://miro.com/);
-3、[Draw.io](https://app.diagrams.net/)，完全免费，可以阅读[这个消息](https://t.me/Notionso/152997)
+3、[Coggle](https://coggle.it/);
+4、[Draw.io](https://app.diagrams.net/)，完全免费，可以阅读[这个消息](https://t.me/Notionso/152997)
 '''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
