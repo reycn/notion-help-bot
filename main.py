@@ -156,6 +156,41 @@ amazonaws.com'''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
+@dp.message_handler(regexp='(标注|剪藏)')
+async def reply(message: types.Message):
+    global LAST_TIME
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    else:
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(1.5)
+        result = '''Q：如何标注/剪藏网页内容？ 
+A：可以试试浏览器插件 [Trove](https://www.trove.so/)'''
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        LAST_TIME = time.time()
+
+@dp.message_handler(regexp='(思维导图|mindmap|脑图|导图|Xmind)')
+async def reply(message: types.Message):
+    global LAST_TIME
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    else:
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(1.5)
+        result = '''Q：如何插入思维导图？ 
+A：Notion 本身暂不支持思维导图，如实在需要可嵌入网页使用：
+1、[Whimsical](https://whimsical.com/);
+2、[Miro](https://miro.com/);
+3、[Draw.io](https://app.diagrams.net/)，完全免费，可以阅读[这个消息](https://t.me/Notionso/152997)
+'''
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        LAST_TIME = time.time()
+
+
 
 @dp.message_handler(regexp='(加入社区|加社区)')
 async def reply(message: types.Message):
@@ -373,6 +408,21 @@ async def reply(message: types.Message):
         sleep(1.5)
         result = '''Q: Notion 风格的头像如何获取？
 A: 官方头像都是设计师专门绘制的，但你也可以[用一个项目生成类似的头像](https://www.openpeeps.com/)'''
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        LAST_TIME = time.time()
+
+@dp.message_handler(regexp='(引用.*太大|引用.*小点)')
+async def reply(message: types.Message):
+    global LAST_TIME
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    else:
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(1.5)
+        result = '''Q: Notion 引用字体太大了？
+A: 可以尝试其他格式，例如 callout'''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
