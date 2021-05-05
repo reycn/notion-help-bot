@@ -104,34 +104,34 @@ async def start(message: types.Message):
 ####################################################################################################
 # 自然指令
 ####################################################################################################
-@dp.message_handler(regexp='(汉化|中国版|本地化|本土化|在地化|中文|国内版|简体|繁体)')
-    # '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文).*Notion)'
-async def reply(message: types.Message):
-    global LAST_TIME
-    global CHINESE_COUNT
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    elif (time.time() - LAST_TIME) < 60:
+# @dp.message_handler(regexp='(汉化|中国版|本地化|本土化|在地化|中文|国内版|简体|繁体)')
+#     # '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文).*Notion)'
+# async def reply(message: types.Message):
+#     global LAST_TIME
+#     global CHINESE_COUNT
+#     clog(message)
+#     if (time.time() - LAST_TIME) < 10:
+#         print("Too frquent, ignored.")
+#         pass
+#     elif (time.time() - LAST_TIME) < 60:
 
-        result = f'''再调戏我，打你屁屁，哼！  w(ﾟДﾟ)w.'''
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(0.5)
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-    else:
-        result = f'''尚未发布，具体上线时间以官方消息为准。
-这是提及中文的第 {CHINESE_COUNT} 次。
+#         result = f'''再调戏我，打你屁屁，哼！  w(ﾟДﾟ)w.'''
+#         await bot.send_chat_action(message.chat.id, action="typing")
+#         sleep(0.5)
+#         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+#     else:
+#         result = f'''尚未发布，具体上线时间以官方消息为准。
+# 这是提及中文的第 {CHINESE_COUNT} 次。
 
 
-[FAQ](https://t.me/Notionso/31739)'''
-        await bot.send_chat_action(message.chat.id, action="typing")
-        CHINESE_COUNT += 1
-        sleep(1.5)
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        with open(syspath[0] + '/logs/chinese.txt', 'w') as f:
-            f.write(str(CHINESE_COUNT))
-        LAST_TIME = time.time()
+# [FAQ](https://t.me/Notionso/31739)'''
+#         await bot.send_chat_action(message.chat.id, action="typing")
+#         CHINESE_COUNT += 1
+#         sleep(1.5)
+#         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+#         with open(syspath[0] + '/logs/chinese.txt', 'w') as f:
+#             f.write(str(CHINESE_COUNT))
+#         LAST_TIME = time.time()
 
 
 @dp.message_handler(regexp='(科学上网)')
@@ -262,7 +262,7 @@ async def reply(message: types.Message):
         await bot.send_chat_action(message.chat.id, action="typing")
         sleep(1.5)
         result = '''Q: 表格功能支持吗？
-A：无，但目前你可以通过公式生成： [表格生成器](https://www.notion.so/reycn/Notion-Table-Generator-c659abf41dfc4af7a69e5ae435b30d0c)'''
+A：无，但目前你可以通过公式生成： [表格生成器](https://tab.quoth.win/)'''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
@@ -349,7 +349,7 @@ A：加入社区后：[教程中心](https://www.notion.so/cnotion/Notion-054e06
         LAST_TIME = time.time()
 
 
-@dp.message_handler(regexp='(访问慢|加载速度|访问速度|国内访问|速度慢)')
+@dp.message_handler(regexp='(访问慢|加载速度|访问速度|国内访问|速度慢|faster|反向代理)')
 async def reply(message: types.Message):
     global LAST_TIME
     clog(message)
@@ -360,7 +360,7 @@ async def reply(message: types.Message):
         await bot.send_chat_action(message.chat.id, action="typing")
         sleep(1.5)
         result = '''Q: Notion 国内访问速度太慢，怎么加速？
-    A：可以通过修改公益项目提供的加速 Hosts 后加速[Notion-Faster](https://www.notion.so/Notion-b39fd3de402e4841a7c2bd64625d1369)'''
+A：可以通过修改公益项目提供的加速 Hosts 后加速[Notion-Faster](https://www.notion.so/Notion-b39fd3de402e4841a7c2bd64625d1369)'''
         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
         LAST_TIME = time.time()
 
@@ -553,7 +553,7 @@ async def reply(message: types.Message):
     if chat_type == 'private':
         clog(message)
         result = '''Q: 表格功能支持吗？
-A：无，但目前你可以通过公式生成： [表格生成器](https://www.notion.so/reycn/Notion-Table-Generator-c659abf41dfc4af7a69e5ae435b30d0c)'''
+A：无，但目前你可以通过公式生成： [表格生成器](https://tab.quoth.win/)'''
         await message.reply(result, parse_mode="markdown")
     else:  # 过滤所有群聊、频道
         pass
