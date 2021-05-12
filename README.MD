@@ -13,3 +13,6 @@ A Telegram bot designed for [Notion CN Community](https://t.me/Notionso).
 
 # Screenshot
 ![img](res/chinese.png)
+
+# Scheduled TODO
+- Support Notion-backend
