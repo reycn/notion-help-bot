@@ -97,7 +97,7 @@ async def start(message: types.Message):
 
 
 ####################################################################################################
-# Commands
+# Group chats
 ####################################################################################################
 for command in COMMANDS:
     @dp.message_handler(regexp=command[0])
@@ -105,7 +105,7 @@ for command in COMMANDS:
         global LAST_TIME
         clog(message)
         if (time.time() - LAST_TIME) < SHORT_THRESHOLD:
-            print("Too frquent, ignored.")
+            print("Too frequent, ignored.")
             pass
         else:
             await bot.send_chat_action(message.chat.id, action="typing")
@@ -140,6 +140,31 @@ for command in COMMANDS:
             await message.reply(result, parse_mode="markdown")
         else: 
             pass
+
+
+
+####################################################################################################
+# Callback
+####################################################################################################
+
+
+
+@dp.message_handler(commands=['nn'])
+async def ask_how_r_u(message: types.Message):
+    await message.reply("Hi!\nHow are you?")
+
+
+@dp.callback_query_handler(text='vote')
+async def _(call: types.CallbackQuery):
+    await call.answer(text="~~~")
+
+
+@dp.callback_query_handler(text='delete')
+async def _(call: types.CallbackQuery):
+    global LAST_TIME
+    await call.message.delete()
+    LAST_TIME = LAST_TIME + 10
+    await call.answer(text="该消息已为所有人删除")
 
 if __name__ == '__main__':
     cprint('I\'m working now...', 'white', 'on_green')
