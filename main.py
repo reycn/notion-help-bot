@@ -15,7 +15,7 @@ from api import fetch_commands
 from aiogram import types
 from types import FunctionType
 
-# 初始化 bot
+# Initializing
 try:
     CHINESE_COUNT = 0
     SHORT_THRESHOLD = 10
@@ -38,12 +38,10 @@ except Exception as e:
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-LAST_TIME = time.time() # 重复检测
+LAST_TIME = time.time() # Duplicate detection
 
 
-# 定义函数
-
-
+# Define functions
 def clog(message):
     chat_type = message.chat.type
     user = message.from_user.username
@@ -65,7 +63,7 @@ delete_btn.insert(InlineKeyboardButton(text='🗑️', callback_data='delete'))
 
 
 ####################################################################################################
-# 欢迎词
+# Welcome Message
 @dp.message_handler(commands=['start', 'welcome', 'about', 'help'])
 async def start(message: types.Message):
     intro = '''进群先看置顶（更新时间：2020-10-10）
@@ -99,7 +97,7 @@ async def start(message: types.Message):
 
 
 ####################################################################################################
-# 命令
+# Commands
 ####################################################################################################
 for command in COMMANDS:
     @dp.message_handler(regexp=command[0])
@@ -123,7 +121,7 @@ for command in COMMANDS:
 
 
 ####################################################################################################
-# 私聊
+# Private Chat
 ####################################################################################################
 
 for command in COMMANDS:
@@ -140,7 +138,7 @@ for command in COMMANDS:
             result = pattern_corr
             # print(command[0])
             await message.reply(result, parse_mode="markdown")
-        else:  # 过滤所有群聊、频道
+        else: 
             pass
 
 if __name__ == '__main__':
