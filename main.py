@@ -18,7 +18,7 @@ from types import FunctionType
 # Initializing
 try:
     CHINESE_COUNT = 0
-    SHORT_THRESHOLD = 10
+    FREQ_THRESHOLD = 10
     cfg = ConfigParser()
     cfg.read(syspath[0] + '/config.ini')
     API_TOKEN = cfg.get('bot', 'token')
@@ -101,10 +101,12 @@ async def start(message: types.Message):
 ####################################################################################################
 for command in COMMANDS:
     @dp.message_handler(regexp=command[0])
-    async def reply(message: types.Message, regexp):
+    async def group(message: types.Message, regexp):
         global LAST_TIME
+        # chat_type = message.chat.type
+        # if chat_type != 'private':
         clog(message)
-        if (time.time() - LAST_TIME) < SHORT_THRESHOLD:
+        if (time.time() - LAST_TIME) < FREQ_THRESHOLD:
             print("Too frequent, ignored.")
             pass
         else:
@@ -124,30 +126,28 @@ for command in COMMANDS:
 # Private Chat
 ####################################################################################################
 
-for command in COMMANDS:
-    # print(command[0], command[1])
-    @dp.message_handler(regexp=command[0])
-    async def reply(message: types.Message):
-        if chat_type == 'private':
-            clog(message)
-            pattern = regexp.re.pattern
-            for i in COMMANDS:
-                if i[0] == pattern:
-                    pattern_corr = i[1]
-                    print(pattern_corr, pattern)
-            result = pattern_corr
-            # print(command[0])
-            await message.reply(result, parse_mode="markdown")
-        else: 
-            pass
-
+# for command in COMMANDS:
+#     # print(command[0], command[1])
+#     @dp.message_handler(regexp=command[0])
+#     async def private(message: types.Message):
+#         chat_type = message.chat.type
+#         if chat_type == 'private':
+#             clog(message)
+#             pattern = regexp.re.pattern
+#             for i in COMMANDS:
+#                 if i[0] == pattern:
+#                     pattern_corr = i[1]
+#                     print(pattern_corr, pattern)
+#             result = pattern_corr
+#             # print(command[0])
+#             await message.reply(result, parse_mode="markdown")
+#         else: 
+#             pass
 
 
 ####################################################################################################
 # Callback
 ####################################################################################################
-
-
 
 @dp.message_handler(commands=['nn'])
 async def ask_how_r_u(message: types.Message):
