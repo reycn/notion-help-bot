@@ -11,14 +11,21 @@ from aiogram.types import InlineQuery, \
     InputTextMessageContent, InlineQueryResultArticle
 from aiogram.types import InlineKeyboardButton
 from aiogram.types import InlineKeyboardMarkup
-
+from api import fetch_commands
 from aiogram import types
+from types import FunctionType
+
 # 初始化 bot
 try:
     CHINESE_COUNT = 0
+    SHORT_THRESHOLD = 10
     cfg = ConfigParser()
     cfg.read(syspath[0] + '/config.ini')
     API_TOKEN = cfg.get('bot', 'token')
+    AUTH = cfg.get('bot', 'auth')
+    DB_ID = cfg.get('bot', 'db_id')
+    COMMANDS = []
+    COMMANDS = fetch_commands(auth=AUTH, db_id=DB_ID)
     with open(syspath[0] + '/logs/chinese.txt', 'r') as f:
         CHINESE_COUNT = int(f.read())
 
@@ -94,512 +101,47 @@ async def start(message: types.Message):
 ####################################################################################################
 # 命令
 ####################################################################################################
-# 中英文
-# @dp.message_handler(commands=['fy', 'tr'])
-# async def fy_command(message: types.Message):
-#     result = msg_trans(message, 3)  # None -> Chinese + English
-#     await message.reply(result)
-
-
-####################################################################################################
-# 自然指令
-####################################################################################################
-# @dp.message_handler(regexp='(汉化|中国版|本地化|本土化|在地化|中文|国内版|简体|繁体)')
-#     # '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文).*Notion)'
-# async def reply(message: types.Message):
-#     global LAST_TIME
-#     global CHINESE_COUNT
-#     clog(message)
-#     if (time.time() - LAST_TIME) < 10:
-#         print("Too frquent, ignored.")
-#         pass
-#     elif (time.time() - LAST_TIME) < 60:
-
-#         result = f'''再调戏我，打你屁屁，哼！  w(ﾟДﾟ)w.'''
-#         await bot.send_chat_action(message.chat.id, action="typing")
-#         sleep(0.5)
-#         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-#     else:
-#         result = f'''尚未发布，具体上线时间以官方消息为准。
-# 这是提及中文的第 {CHINESE_COUNT} 次。
-
-
-# [FAQ](https://t.me/Notionso/31739)'''
-#         await bot.send_chat_action(message.chat.id, action="typing")
-#         CHINESE_COUNT += 1
-#         sleep(1.5)
-#         await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-#         with open(syspath[0] + '/logs/chinese.txt', 'w') as f:
-#             f.write(str(CHINESE_COUNT))
-#         LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(科学上网)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：如何设置 Notion 的科学上网？
-A：将以下域名加入工具规则——
-loggly.com
-segment.com
-intercom.io
-intercomcdn.com
-amplitude.com
-notion.so
-amazonaws.com'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(标注|剪藏)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：如何标注/剪藏网页内容？ 
-A：可以试试浏览器插件 [Trove](https://www.trove.so/)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(思维导图|mindmap|脑图|导图|Xmind)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：如何插入思维导图？ 
-A：Notion 本身暂不支持思维导图，如实在需要可嵌入网页使用：
-1、[Whimsical](https://whimsical.com/);
-2、[Miro](https://miro.com/);
-3、[Coggle](https://coggle.it/);
-4、[Draw.io](https://app.diagrams.net/)，完全免费，可以阅读[这个消息](https://t.me/Notionso/152997)
-'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-
-@dp.message_handler(regexp='(加入社区|加社区)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：如何加入 Notion 中文社区？
-A：打开 https://linmi.cc/n ，在文章下方留言申请——
-* 邮箱填写你的 Notion 注册邮箱。
-* 网址无需填写。
-* 每晚 9 点统一处理。
-（注：申请表单为群主私人网站建立，邮箱填写对外隐藏，不会外泄，不会发送广告及其他内容。）'''
-        await message.reply(result, reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(^|\b)hosts?($|\b)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：如何找到对应的 Hosts
-A：请看以下内容：
-108.162.236.1/24 联通 走美国
-172.64.32.1/24 移动 走香港
-104.16.160.1/24 电信 走美国洛杉矶
-172.64.0.0/24 电信 美国旧金山
-104.20.157.0/24 联通 走日本
-104.28.14.0/24 移动 走新加坡'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(有.*功能吗|功能.*吗|支持.*吗)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q：悬浮 TOC、脑图等功能支持有么？
-A：无，建议功能问题先询问客服，类似是否支持 xx 功能。在右下角的问号，`Send us a message。`'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(表格)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: 表格功能支持吗？
-A：无，但目前你可以通过公式生成： [表格生成器](https://tab.quoth.win/)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(置顶)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''好嘞！ 这就是 [置顶](https://t.me/Notionso/123746)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-
-@dp.message_handler(regexp='(侧边目录|浮动目录|悬浮目录|悬浮toc|悬浮 toc)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: 悬浮目录支持吗？
-A：无，但目前你可以通过下列两种方式使用：
-1、浏览器用户，安装以下插件之一 ——
-－ [Notion Boost](https://gourav.io/notion-boost)、
-－ [Notion X](https://github.com/scarsu/NotionX)；
-2、客户端用户，安装 [Notion Enhancer](https://github.com/notion-enhancer/notion-enhancer)。'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(设置字体|改字体)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''只能选择字体风格（Sans、Serif、Mono），不能选择具体的字体'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(有模板|找模板)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: 在哪里能找到模板？
-A：加入社区后：[模板中心](https://www.notion.so/cnotion/Notion-bc848f6560db42f6888c5104685d815d)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(有教程|找教程)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: 在哪里能找到教程？
-A：加入社区后：[教程中心](https://www.notion.so/cnotion/Notion-054e065841894c4e8852afd629c9fbdc)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(访问慢|加载速度|访问速度|国内访问|速度慢|faster|反向代理)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: Notion 国内访问速度太慢，怎么加速？
-A：可以通过修改公益项目提供的加速 Hosts 后加速[Notion-Faster](https://www.notion.so/Notion-b39fd3de402e4841a7c2bd64625d1369)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-
-@dp.message_handler(regexp='(访问慢|加载速度|访问速度|国内访问|速度慢)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: Notion 国内访问速度太慢，怎么加速？
-    A：可以通过修改公益项目提供的加速 Hosts 后加速[Notion-Faster](https://www.notion.so/Notion-b39fd3de402e4841a7c2bd64625d1369)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(clubhouse.*邀请码|邀请码.*clubhouse)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''一、这里是 Notion 社区，不是 Clubhouse 社区。
-二、Linmi 个人站里提到的是 Clubhouse 的群，不是这个群。
-三、「不要问『怎么获取邀请码』」。'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(notion.*头像|头像.*notion)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: Notion 风格的头像如何获取？
-A: 官方头像都是设计师专门绘制的，但你也可以[用一个项目生成类似的头像](https://www.openpeeps.com/)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(引用.*太大|引用.*小点)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: Notion 引用字体太大了？
-A: 可以尝试其他格式，例如 callout'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-@dp.message_handler(regexp='(notion.*博客|博客.*notion|Nobelium)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''Q: 怎么用 Notion 搭建博客？ 
-A: 可以试试 [Nobelium](https://github.com/craigary/nobelium/blob/main/README-CN.md) 
-
-它是一个使用 NextJS + Notion API 实现的，部署在 Vercel 上的静态博客系统。
-
-> [效果预览](https://nobelium.vercel.app/)
-> [项目开源地址](https://github.com/craigary/nobelium)
-> [小白部署指南](https://blog.skylershu.com/post/nobelium-deployment-guide/)'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
-
-
-@dp.message_handler(regexp='(机器人您好笨)')
-async def reply(message: types.Message):
-    global LAST_TIME
-    clog(message)
-    if (time.time() - LAST_TIME) < 10:
-        print("Too frquent, ignored.")
-        pass
-    else:
-        await bot.send_chat_action(message.chat.id, action="typing")
-        sleep(1.5)
-        result = '''啊哈 彼此彼此'''
-        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-        LAST_TIME = time.time()
+for command in COMMANDS:
+    @dp.message_handler(regexp=command[0])
+    async def reply(message: types.Message, regexp):
+        global LAST_TIME
+        clog(message)
+        if (time.time() - LAST_TIME) < SHORT_THRESHOLD:
+            print("Too frquent, ignored.")
+            pass
+        else:
+            await bot.send_chat_action(message.chat.id, action="typing")
+            pattern = regexp.re.pattern
+            for i in COMMANDS:
+                if i[0] == pattern:
+                    pattern_corr = i[1]
+                    print(pattern_corr, pattern)
+            # sleep(0.5)
+            result = pattern_corr
+            await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+            LAST_TIME = time.time()
 
 
 ####################################################################################################
 # 私聊
 ####################################################################################################
-# @dp.message_handler(
-#     regexp=
-#     '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化).*Notion)'
-# )
-# async def reply(message: types.Message):
-#     chat_type = message.chat.type
-#     if chat_type == 'private':
-#         clog(message)
 
-#         result = '没有中国版，详情请查阅：  [Notion 中文什么时候有？](https://linmi.cc/pin/18989)'
-#         await message.reply(result, parse_mode="markdown")
-#     else:  # 过滤所有群聊、频道
-#         pass
-
-
-@dp.message_handler(regexp='(科学上网)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q：如何设置 Notion 的科学上网？
-    A：将以下域名加入工具规则——
-    loggly.com
-    segment.com
-    intercom.io
-    intercomcdn.com
-    amplitude.com
-    notion.so
-    amazonaws.com'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(regexp='(社区)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q：如何加入 Notion 中文社区？
-A：打开 https://linmi.cc/n ，在文章下方留言申请——
-* 邮箱填写你的 Notion 注册邮箱。
-* 网址无需填写。
-* 每晚 9 点统一处理。
-（注：申请表单为群主私人网站建立，邮箱填写对外隐藏，不会外泄，不会发送广告及其他内容。）'''
-        await message.reply(result)
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(regexp='(^|\b)hosts?($|\b)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q：如何找到对应的 Hosts
-A：请看以下内容：
-108.162.236.1/24 联通 走美国
-172.64.32.1/24 移动 走香港
-104.16.160.1/24 电信 走美国洛杉矶
-172.64.0.0/24 电信 美国旧金山
-104.20.157.0/24 联通 走日本
-104.28.14.0/24 移动 走新加坡'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(regexp='(有.*功能吗|功能.*吗|支持.*吗)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = result = '''Q：悬浮 TOC、脑图等功能支持有么？
-A：无，建议功能问题先询问客服，类似是否支持 xx 功能。在右下角的问号，`Send us a message。`'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(regexp='(表格)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q: 表格功能支持吗？
-A：无，但目前你可以通过公式生成： [表格生成器](https://tab.quoth.win/)'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(commands=['nn'])
-async def ask_how_r_u(message: types.Message):
-    await message.reply("Hi!\nHow are you?")
-
-
-@dp.callback_query_handler(text='vote')
-async def _(call: types.CallbackQuery):
-    await call.answer(text="~~~")
-
-
-@dp.callback_query_handler(text='delete')
-async def _(call: types.CallbackQuery):
-    global LAST_TIME
-    await call.message.delete()
-    LAST_TIME = LAST_TIME + 10
-    await call.answer(text="该消息已为所有人删除")
-
-
-@dp.message_handler(regexp='(模板)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q: 在哪里能找到模板？
-A：加入社区后：[模板中心](https://www.notion.so/cnotion/Notion-bc848f6560db42f6888c5104685d815d)'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
-
-@dp.message_handler(regexp='(教程)')
-async def reply(message: types.Message):
-    chat_type = message.chat.type
-    if chat_type == 'private':
-        clog(message)
-        result = '''Q: 在哪里能找到教程？
-A：加入社区后：[教程中心](https://www.notion.so/cnotion/Notion-054e065841894c4e8852afd629c9fbdc)'''
-        await message.reply(result, parse_mode="markdown")
-    else:  # 过滤所有群聊、频道
-        pass
-
+for command in COMMANDS:
+    # print(command[0], command[1])
+    @dp.message_handler(regexp=command[0])
+    async def reply(message: types.Message):
+        if chat_type == 'private':
+            clog(message)
+            pattern = regexp.re.pattern
+            for i in COMMANDS:
+                if i[0] == pattern:
+                    pattern_corr = i[1]
+                    print(pattern_corr, pattern)
+            result = pattern_corr
+            # print(command[0])
+            await message.reply(result, parse_mode="markdown")
+        else:  # 过滤所有群聊、频道
+            pass
 
 if __name__ == '__main__':
     cprint('I\'m working now...', 'white', 'on_green')

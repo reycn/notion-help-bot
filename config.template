@@ -1,2 +1,4 @@
 [bot]
-token=111111111:Asdfasdfasdfasdfasdfadsfsadfasda
+token = 111111111:Asdfasdfasdfasdfasdfadsfsadfasda
+auth = Bearer secret_asjdfasfjasodfaskfjaslfdalksdfalsmN
+db_id = 8as8dfuasihjfd8a8ajsdfojoj
