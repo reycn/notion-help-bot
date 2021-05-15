@@ -99,6 +99,34 @@ async def start(message: types.Message):
 ####################################################################################################
 # Group chats
 ####################################################################################################
+@dp.message_handler(regexp='(汉化|中国版|本地化|本土化|在地化|中文|国内版|简体|繁体)')
+    # '(Notion.*(有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文))|((有中文|没中文|汉化|中国版|本地化|本土化|在地化|中文).*Notion)'
+async def reply(message: types.Message):
+    global LAST_TIME
+    global CHINESE_COUNT
+    clog(message)
+    if (time.time() - LAST_TIME) < 10:
+        print("Too frquent, ignored.")
+        pass
+    elif (time.time() - LAST_TIME) < 60:
+        result = f'''再调戏我，打你屁屁，哼！  w(ﾟДﾟ)w.'''
+        await bot.send_chat_action(message.chat.id, action="typing")
+        sleep(0.5)
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+    else:
+        result = f'''尚未发布，具体上线时间以官方消息为准。
+这是提及中文的第 {CHINESE_COUNT} 次。
+
+[FAQ](https://t.me/Notionso/31739)'''
+        await bot.send_chat_action(message.chat.id, action="typing")
+        CHINESE_COUNT += 1
+        sleep(1.5)
+        await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+        with open(syspath[0] + '/logs/chinese.txt', 'w') as f:
+            f.write(str(CHINESE_COUNT))
+        LAST_TIME = time.time()
+
+
 for command in COMMANDS:
     @dp.message_handler(regexp=command[0])
     async def group(message: types.Message, regexp):
