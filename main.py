@@ -128,26 +128,32 @@ async def reply(message: types.Message):
 
 
 for command in COMMANDS:
-    @dp.message_handler(regexp=command[0])
-    async def group(message: types.Message, regexp):
-        global LAST_TIME
-        # chat_type = message.chat.type
-        # if chat_type != 'private':
-        clog(message)
-        if (time.time() - LAST_TIME) < FREQ_THRESHOLD:
-            print("Too frequent, ignored.")
-            pass
-        else:
-            await bot.send_chat_action(message.chat.id, action="typing")
-            pattern = regexp.re.pattern
-            for i in COMMANDS:
-                if i[0] == pattern:
-                    pattern_corr = i[1]
-                    print(pattern_corr, pattern)
-            # sleep(0.5)
-            result = pattern_corr
-            await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
-            LAST_TIME = time.time()
+    print(command[0])
+    try:
+        @dp.message_handler(regexp=command[0])
+        async def group(message: types.Message, regexp):
+            global LAST_TIME
+            # chat_type = message.chat.type
+            # if chat_type != 'private':
+            clog(message)
+            if (time.time() - LAST_TIME) < FREQ_THRESHOLD:
+                print("Too frequent, ignored.")
+                pass
+            else:
+                await bot.send_chat_action(message.chat.id, action="typing")
+                pattern = regexp.re.pattern
+                for i in COMMANDS:
+                    if i[0] == pattern:
+                        pattern_corr = i[1]
+                        print(pattern_corr, pattern)
+                # sleep(0.5)
+                result = pattern_corr
+                # print(result)
+                await message.reply(result, parse_mode="markdown", reply_markup=delete_btn)
+                LAST_TIME = time.time()
+    except Exception as e:
+        cprint(f"Error ignored: {e}", 'white', 'on_yellow')
+        pass
 
 
 ####################################################################################################
@@ -177,17 +183,17 @@ for command in COMMANDS:
 # Callback
 ####################################################################################################
 
-@dp.message_handler(commands=['nn'])
+@dp.message_handler(commands:list=['nn'])
 async def ask_how_r_u(message: types.Message):
     await message.reply("Hi!\nHow are you?")
 
 
-@dp.callback_query_handler(text='vote')
+@dp.callback_query_handler(text:str='vote')
 async def _(call: types.CallbackQuery):
     await call.answer(text="~~~")
 
 
-@dp.callback_query_handler(text='delete')
+@dp.callback_query_handler(text:str='delete')
 async def _(call: types.CallbackQuery):
     global LAST_TIME
     await call.message.delete()
