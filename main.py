@@ -117,7 +117,7 @@ async def reply(message: types.Message):
         result = f'''尚未发布，具体上线时间以官方消息为准。
 这是提及中文的第 {CHINESE_COUNT} 次。
 
-[FAQ](https://t.me/Notionso/31739)'''
+[FAQ](https://t.me/Notionso/199403)'''
         await bot.send_chat_action(message.chat.id, action="typing")
         CHINESE_COUNT += 1
         sleep(1.5)
