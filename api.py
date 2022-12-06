@@ -34,6 +34,26 @@ def fetch_commands(auth:str, db_id:str) -> dict:
         cprint(f"{r.status_code}: {err}", 'white', 'on_red')
         return None
 
+def fetch_welcome(auth:str, db_id:str) -> dict:
+    COMMANDS = []
+    DB_URL = f'https://api.notion.com/v1/databases/{db_id}/query'
+    CONT_TYPE = 'application/json'
+    HEAD = {'Authorization': auth, \
+            'Content-Type': CONT_TYPE,\
+            'Notion-Version': '2021-05-13'}
+    FILTER = '''{"filter":{"property":"启用", "checkbox":{"equals": true}}}'''.encode('utf-8')
+    r = requests.post(DB_URL, headers=HEAD, data=FILTER)
+    if r.status_code == 200:
+        cprint(r.status_code, 'white', 'on_green')
+        for result in r.json()['results']:
+            COMMANDS.append([result['properties']['正则']['rich_text'][0]['plain_text'], descipt_to_md(result)])
+        # print(COMMANDS)
+        return COMMANDS
+    else:
+        err = json.loads(r.text)['message']
+        cprint(f"{r.status_code}: {err}", 'white', 'on_red')
+        return None
+
 
 if __name__ == '__main__':
     try:
