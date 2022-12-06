@@ -8,7 +8,10 @@ def descipt_to_md(rich_text:str) -> str:
     def parse_content(text:json) -> str:
         # print(text)
         if text['link']:
-            return f"[{text['content']}]({text['link']['url']})"
+            url = text['link']['url']
+            if url and url[0] == '/':
+                url = 'https://www.notion.so' + url
+            return f"[{text['content']}]({url})"
         else:
             return text['content']
     rich_text = ''.join([parse_content(i['text']) for i in rich_text])
